@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
+
+import 'package:passwords/pages/home.dart';
+import 'package:passwords/pages/auth.dart';
 
 void main() {
   runApp(const MyApp());
@@ -72,68 +74,5 @@ class _MainPage extends State<MainPage> {
     else{
       return LoginPage();
     }
-  }
-}
-
-class LoginPage extends StatelessWidget{
-  @override
-  Widget build(BuildContext context){
-    var appState = context.watch<MyAppState>();
-    appState.authenticate();
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              const Text("Zadejte pin, nebo použijte biometrické ověření"),
-              PinInput(),
-              ElevatedButton(
-                onPressed: (){
-                  appState.authenticate();
-                }, 
-                child: const Text("Použít biometriku")
-              ),
-            ],
-          ),
-        )
-      ),
-    );
-  }
-}
-
-class PinInput extends StatelessWidget{
-  @override
-  Widget build(BuildContext context){
-    var appState = context.watch<MyAppState>();
-    return Form(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: PinCodeTextField(
-          appContext: context, 
-          length: 6, 
-          onChanged: (value) {}, //Tohle nepotřebuju, ale musí to být definované
-          keyboardType: TextInputType.number,
-          pinTheme: PinTheme(
-            shape: PinCodeFieldShape.box,
-            borderRadius: BorderRadius.circular(8),
-            inactiveColor: Colors.grey
-          ),
-          onCompleted: (value){
-            print("Completed $value");
-          },
-        )
-      ),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget{
-  @override
-  Widget build(BuildContext context){
-    return Scaffold(
-      body: SafeArea(
-        child: const Text("HomePage")
-      )
-    );
   }
 }
