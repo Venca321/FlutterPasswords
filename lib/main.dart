@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:passwords/database.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
@@ -53,6 +54,25 @@ class MyAppState extends ChangeNotifier {
       authed = false;
     }
   }
+
+  void checkPin(pin, enteredPin){
+    if (pin == enteredPin){
+      authed = true;
+      notifyListeners();
+    }
+  }
+
+  var pin = null;
+  void setPin(newPin){
+    pin = newPin;
+    notifyListeners();
+  }
+
+  var biometrics = null;
+  void setBiometrics(newBiometrics){
+    biometrics = newBiometrics;
+    notifyListeners();
+  }
 }
 
 class MainPage extends StatefulWidget {
@@ -72,7 +92,7 @@ class _MainPage extends State<MainPage> {
       return HomePage();
     }
     else{
-      return LoginPage();
+      return AuthPage();
     }
   }
 }

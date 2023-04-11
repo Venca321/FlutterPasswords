@@ -18,36 +18,44 @@ String decrypt(text) {
   return decrypted;
 }
 
-Database getDatabase(){
-  Database database = openDatabase("database.db", version: 1,
+Future<Database> getDatabase() async {
+  Database database = await openDatabase("database.db", version: 1,
       onCreate: (Database db, int version) async {
       await db.execute('CREATE TABLE User (pin INTEGER, biometrics TEXT)');
       await db.execute('CREATE TABLE Records (name TEXT, username TEXT, password TEXT)');
-      userRegister();
-  }) as Database;
+  });
   return database;
 }
 
-void userRegister(){
-  print("Register");
+Future<void> userRegister(pin, biometrics) async {
+  var db = await getDatabase();
+  await db.transaction((txn) async {
+    await txn.rawInsert(
+      'INSERT INTO User(pin, biometrics) VALUES($pin, $biometrics)'
+    );
+  });
+  await db.close();
 }
 
-Future<Map> getUser() async {
-  var db = getDatabase();
+Future<Map?> getUser() async {
+  var db = await getDatabase();
   List<Map> list = await db.rawQuery('SELECT * FROM User');
   await db.close();
-  return list[0];
+  try{
+    return list[0];
+  }
+  catch(e){print(list);}
 }
 
 Future<List<Map>> getRecords() async {
-  var db = getDatabase();
+  var db = await getDatabase();
   List<Map> list = await db.rawQuery('SELECT * FROM Records');
   await db.close();
   return list;
 }
 
 Future<void> addRecord(name, username, password) async {
-  var db = getDatabase();
+  var db = await getDatabase();
   var encryptedName = encrypt(name);
   var encryptedUsername = encrypt(username);
   var encryptedPassword = encrypt(password);
@@ -60,7 +68,7 @@ Future<void> addRecord(name, username, password) async {
 }
 
 Future<void> removeRecord(name, username, password) async {
-  var db = getDatabase();
+  var db = await getDatabase();
   var encryptedName = encrypt(name);
   var encryptedUsername = encrypt(username);
   var encryptedPassword = encrypt(password);
@@ -72,7 +80,7 @@ Future<void> removeRecord(name, username, password) async {
 }
 
 Future<void> editRecord(name, username, password, newName, newUsername, newPassword) async {
-  var db = getDatabase();
+  var db = await getDatabase();
   var encryptedName = encrypt(name);
   var encryptedUsername = encrypt(username);
   var encryptedPassword = encrypt(password);

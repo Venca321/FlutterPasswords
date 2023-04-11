@@ -6,6 +6,24 @@ import 'package:provider/provider.dart';
 import '../database.dart';
 import '../main.dart';
 
+class AuthPage extends StatelessWidget{
+  @override
+  Widget build(BuildContext context){
+    var appState = context.watch<MyAppState>();
+    getUser().then((value) => {
+      appState.setPin(value?["pin"]),
+      appState.setBiometrics(value?["biometrics"])
+    });
+
+    if(appState.pin == null){
+      return RegisterPage();
+    }
+    else{
+      return LoginPage();
+    }
+  }
+}
+
 class LoginPage extends StatelessWidget{
   @override
   Widget build(BuildContext context){
@@ -36,8 +54,8 @@ class PinInput extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     var appState = context.watch<MyAppState>();
-    var UserData = getUser();
-    print(UserData);
+    //var UserData = getUser();
+    //print(UserData);
     return Form(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -52,8 +70,34 @@ class PinInput extends StatelessWidget{
             inactiveColor: Colors.grey
           ),
           onCompleted: (value){
-            print(encrypt(value));
+            appState.checkPin(appState.pin, value);
           },
+        )
+      ),
+    );
+  }
+}
+
+class RegisterPage extends StatelessWidget{
+  @override
+  Widget build(BuildContext context){
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            children: [
+              const Text("Registrace"),
+              PinInput(),
+              PinInput(),
+              ElevatedButton(
+                onPressed: (){
+                  //userRegister("123456", "true");
+                  getUser();
+                }, 
+                child: const Text("Použít biometriku")
+              ),
+            ],
+          ),
         )
       ),
     );
