@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
+import '../database.dart';
 import '../main.dart';
 
 class LoginPage extends StatelessWidget{
@@ -35,6 +36,8 @@ class PinInput extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     var appState = context.watch<MyAppState>();
+    var UserData = getUser();
+    print(UserData);
     return Form(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -49,7 +52,7 @@ class PinInput extends StatelessWidget{
             inactiveColor: Colors.grey
           ),
           onCompleted: (value){
-            print("Completed $value");
+            print(encrypt(value));
           },
         )
       ),
