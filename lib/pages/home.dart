@@ -19,14 +19,38 @@ class HomePage extends StatelessWidget{
           child: Column(
             children: [
               SizedBox(height: 30),
-              Text("Vaše záznamy:", style: Theme.of(context).textTheme.titleLarge),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: Colors.green),
+                          )
+                        )
+                      ),
+                      onPressed: (){
+                        print("Press");
+                      },
+                      child: Icon(
+                        Icons.add,
+                        size: 32,
+                      )
+                    ),
+                  ),
+                  Text("Vaše záznamy:", style: Theme.of(context).textTheme.titleLarge),
+                ],
+              ),
               SizedBox(height: 20),
               for (var record in appState.records)
                 InkWell(
                   onTap: (){
                     print("Pressed");
                   }, 
-                  child: MyCard(text: record["name"])
+                  child: MyCard(text: record)
                 )
             ],
           ),
@@ -42,7 +66,7 @@ class MyCard extends StatelessWidget {
     required this.text,
   });
 
-  final String text;
+  final text;
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +84,79 @@ class MyCard extends StatelessWidget {
           padding: const EdgeInsets.all(14),
           child: Container(
             width: double.maxFinite,
-            child: Text(
-              text,
-              style: style
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  text["name"],
+                  style: style
+                ),
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: (){
+                        print("Copy");
+                      },
+                      child: Icon(Icons.copy, color: theme.colorScheme.onPrimary),
+                    ),
+                    InkWell(
+                      onTap: () => showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Upozornění'),
+                          content: const Text('Toto je nevratná operace, určitě chcete záznam smazat?'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'Cancel'),
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: (){
+                                removeRecord(text["name"], text["username"], text["password"]);
+                                Navigator.pop(context, 'Ok');
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      child: Icon(Icons.delete, color: theme.colorScheme.onPrimary),
+                    )
+                  ],
+                )
+              ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class DialogExample extends StatelessWidget {
+  const DialogExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () => showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Upozornění'),
+          content: const Text('Toto je nevratná operace, určitě chcete záznam smazat?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      ),
+      child: const Text('Show Dialog'),
     );
   }
 }

@@ -46,8 +46,10 @@ class MyAppState extends ChangeNotifier {
           biometricOnly: true
         )
       );
+      
+      authed = authenticated;
       if (authenticated){
-        authed = authenticated;
+        print(authenticated);
         notifyListeners();
       }
     }on PlatformException catch(e){

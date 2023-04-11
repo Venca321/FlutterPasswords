@@ -28,7 +28,7 @@ class LoginPage extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     var appState = context.watch<MyAppState>();
-    appState.authenticate();
+    //appState.authenticate();
     return Scaffold(
       body: SafeArea(
         child: Center(

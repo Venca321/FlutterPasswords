@@ -79,7 +79,7 @@ Future<void> removeRecord(name, username, password) async {
   var encryptedUsername = encrypt(username);
   var encryptedPassword = encrypt(password);
   await db.rawDelete(
-    'DELETE FROM Records WHERE name = ?, username = ?, password = ?', 
+    'DELETE FROM Records WHERE name = ? and username = ? and password = ?', 
     [encryptedName, encryptedUsername, encryptedPassword]
   );
   await db.close();
