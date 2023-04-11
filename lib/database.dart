@@ -14,7 +14,7 @@ String encrypt(text) {
 String decrypt(text) {
   final key = Key.fromUtf8('my 32 length key................');
   final encrypter = Encrypter(AES(key));
-  final decrypted = encrypter.decrypt(text, iv: iv);
+  final decrypted = encrypter.decrypt64(text, iv: iv);
   return decrypted;
 }
 
@@ -47,11 +47,17 @@ Future<Map?> getUser() async {
   catch(e){print(list);}
 }
 
-Future<List<Map>> getRecords() async {
+Future<List> getRecords() async {
   var db = await getDatabase();
   List<Map> list = await db.rawQuery('SELECT * FROM Records');
   await db.close();
-  return list;
+  var decryptedList = [];
+  for (var record in list){
+    decryptedList.add(
+      {"name": decrypt(record["name"]), "username": decrypt(record["username"]), "password": decrypt(record["password"])}
+    );
+  }
+  return decryptedList;
 }
 
 Future<void> addRecord(name, username, password) async {
@@ -61,7 +67,7 @@ Future<void> addRecord(name, username, password) async {
   var encryptedPassword = encrypt(password);
   await db.transaction((txn) async {
     await txn.rawInsert(
-      'INSERT INTO Records(name, username, password) VALUES($encryptedName, $encryptedUsername, $encryptedPassword)'
+      'INSERT INTO Records(name, username, password) VALUES("$encryptedName", "$encryptedUsername", "$encryptedPassword")'
     );
   });
   await db.close();

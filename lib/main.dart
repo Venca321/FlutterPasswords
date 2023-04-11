@@ -73,6 +73,12 @@ class MyAppState extends ChangeNotifier {
     biometrics = newBiometrics;
     notifyListeners();
   }
+
+  var records = [];
+  void loadRecords(newRecords){
+    records = newRecords;
+    notifyListeners();
+  }
 }
 
 class MainPage extends StatefulWidget {

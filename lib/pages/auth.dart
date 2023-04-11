@@ -54,8 +54,6 @@ class PinInput extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     var appState = context.watch<MyAppState>();
-    //var UserData = getUser();
-    //print(UserData);
     return Form(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
