@@ -5,6 +5,6 @@ Flutter aplikace pro ukládání hesel
 
 5.4. - 1.5h \
 10.4. - 1h \
-11.4. - 3h --14:30
+11.4. - 3.5h
 
-Celkem: 5.5h
+Celkem: 6h

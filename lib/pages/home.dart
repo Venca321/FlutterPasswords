@@ -13,15 +13,60 @@ class HomePage extends StatelessWidget{
       appState.loadRecords(value)
     });
 
-    return SafeArea(
-      child: Column(
-        children: [
-          SizedBox(height: 50,),
-          for (var record in appState.records)
-            Text(record["name"], textScaleFactor: 0.4,)
-        ],
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            children: [
+              SizedBox(height: 30),
+              Text("Vaše záznamy:", style: Theme.of(context).textTheme.titleLarge),
+              SizedBox(height: 20),
+              for (var record in appState.records)
+                InkWell(
+                  onTap: (){
+                    print("Pressed");
+                  }, 
+                  child: MyCard(text: record["name"])
+                )
+            ],
+          ),
+        )
       )
     );
   }
 }
 
+class MyCard extends StatelessWidget {
+  const MyCard({
+    super.key,
+    required this.text,
+  });
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.displayMedium!.copyWith(
+      color: theme.colorScheme.onPrimary,
+      fontSize: 22
+    );
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 2, 12, 2),
+      child: Card(
+        color: theme.colorScheme.primary,
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Container(
+            width: double.maxFinite,
+            child: Text(
+              text,
+              style: style
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

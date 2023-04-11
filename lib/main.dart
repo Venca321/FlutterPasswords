@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:passwords/database.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
@@ -24,8 +23,9 @@ class MyApp extends StatelessWidget {
         title: 'Password manager',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         ),
+        themeMode: ThemeMode.dark,
         home: const MainPage(),
       ),
     );

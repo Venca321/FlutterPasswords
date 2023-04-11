@@ -89,8 +89,7 @@ class RegisterPage extends StatelessWidget{
               PinInput(),
               ElevatedButton(
                 onPressed: (){
-                  //userRegister("123456", "true");
-                  getUser();
+                  print("Press");
                 }, 
                 child: const Text("Použít biometriku")
               ),
