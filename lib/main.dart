@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 void main() {
   runApp(const MyApp());
@@ -49,14 +50,6 @@ class MyAppState extends ChangeNotifier {
     }on PlatformException catch(e){
       authed = false;
     }
-  }
-
-  var pin = {};
-
-  void enter_pin(pin_value, location) async {
-    pin[location] = pin_value;
-    print(pin);
-    notifyListeners();
   }
 }
 
@@ -115,137 +108,20 @@ class PinInput extends StatelessWidget{
     return Form(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              height: 48,
-              width: 44,
-              child: TextFormField(
-                onSaved: (newValue) {
-                  appState.enter_pin(newValue, 0);
-                },
-                onChanged: (value) {
-                  if (value.length == 1){
-                    FocusScope.of(context).nextFocus();
-                  }
-                },
-                style: Theme.of(context).textTheme.titleLarge,
-                keyboardType: TextInputType.number,
-                textAlign: TextAlign.center,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(1),
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 48,
-              width: 44,
-              child: TextFormField(
-                onSaved: (newValue) {
-                  appState.enter_pin(newValue, 1);
-                },
-                onChanged: (value) {
-                  if (value.length == 1){
-                    FocusScope.of(context).nextFocus();
-                  }
-                },
-                style: Theme.of(context).textTheme.headline6,
-                keyboardType: TextInputType.number,
-                textAlign: TextAlign.center,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(1),
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 48,
-              width: 44,
-              child: TextFormField(
-                onSaved: (newValue) {
-                  appState.enter_pin(newValue, 2);
-                },
-                onChanged: (value) {
-                  if (value.length == 1){
-                    FocusScope.of(context).nextFocus();
-                  }
-                },
-                style: Theme.of(context).textTheme.headline6,
-                keyboardType: TextInputType.number,
-                textAlign: TextAlign.center,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(1),
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 48,
-              width: 44,
-              child: TextFormField(
-                onSaved: (newValue) {
-                  appState.enter_pin(newValue, 3);
-                },
-                onChanged: (value) {
-                  if (value.length == 1){
-                    FocusScope.of(context).nextFocus();
-                  }
-                },
-                style: Theme.of(context).textTheme.headline6,
-                keyboardType: TextInputType.number,
-                textAlign: TextAlign.center,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(1),
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 48,
-              width: 44,
-              child: TextFormField(
-                onSaved: (newValue) {
-                  appState.enter_pin(newValue, 4);
-                },
-                onChanged: (value) {
-                  if (value.length == 1){
-                    FocusScope.of(context).nextFocus();
-                  }
-                },
-                style: Theme.of(context).textTheme.headline6,
-                keyboardType: TextInputType.number,
-                textAlign: TextAlign.center,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(1),
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 48,
-              width: 44,
-              child: TextFormField(
-                onSaved: (newValue) {
-                  appState.enter_pin(newValue, 5);
-                },
-                onChanged: (value) {
-                  if (value.length == 1){
-                    FocusScope.of(context).nextFocus();
-                  }
-                },
-                style: Theme.of(context).textTheme.headline6,
-                keyboardType: TextInputType.number,
-                textAlign: TextAlign.center,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(1),
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-              ),
-            ),
-          ]
-        ),
+        child: PinCodeTextField(
+          appContext: context, 
+          length: 6, 
+          onChanged: (value) {}, //Tohle nepotřebuju, ale musí to být definované
+          keyboardType: TextInputType.number,
+          pinTheme: PinTheme(
+            shape: PinCodeFieldShape.box,
+            borderRadius: BorderRadius.circular(8),
+            inactiveColor: Colors.grey
+          ),
+          onCompleted: (value){
+            print("Completed $value");
+          },
+        )
       ),
     );
   }
