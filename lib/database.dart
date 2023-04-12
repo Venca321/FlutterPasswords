@@ -88,6 +88,9 @@ Future<void> removeRecord(name, username, password) async {
 
 Future<void> editRecord(name, username, password, newName, newUsername, newPassword) async {
   var db = await getDatabase();
+  newName ??= name;
+  newUsername ??= username;
+  newPassword ??= password;
   var encryptedName = encrypt(name);
   var encryptedUsername = encrypt(username);
   var encryptedPassword = encrypt(password);
@@ -95,7 +98,7 @@ Future<void> editRecord(name, username, password, newName, newUsername, newPassw
   var newEncryptedUsername = encrypt(newUsername);
   var newEncryptedPassword = encrypt(newPassword);
   await db.rawUpdate(
-    'UPDATE Records SET name = ?, username = ?, password = ? WHERE name = ?, username = ?, password = ?',
+    'UPDATE Records SET name = ?, username = ?, password = ? WHERE name = ? and username = ? and password = ?',
     [newEncryptedName, newEncryptedUsername, newEncryptedPassword, encryptedName, encryptedUsername, encryptedPassword]
   );
   await db.close();

@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import 'package:passwords/pages/edit.dart';
 import 'package:passwords/pages/detail.dart';
 import '../main.dart';
 import 'package:passwords/database.dart';
@@ -15,6 +17,8 @@ class HomePage extends StatelessWidget{
       return AddRecord();
     else if (appState.onPage == 2)
       return DetailPage();
+    else if (appState.onPage == 3)
+      return EditPage();
     return HomeWidget();
   }
 }
@@ -124,17 +128,7 @@ class MyCard extends StatelessWidget {
                     )
                   ],
                 ),
-                Row(
-                  children: [
-                    InkWell(
-                      onTap: (){
-                        print("Copy");
-                      },
-                      child: Icon(Icons.copy, color: theme.colorScheme.onPrimary),
-                    ),
-                    TrashButton(text: text, theme: theme)
-                  ],
-                )
+                TrashButton(text: text, theme: theme)
               ],
             ),
           ),
@@ -165,7 +159,7 @@ class TrashButton extends StatelessWidget {
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context, 'Cancel'),
-              child: const Text('Cancel'),
+              child: const Text('Zrušit'),
             ),
             TextButton(
               onPressed: (){
@@ -178,34 +172,6 @@ class TrashButton extends StatelessWidget {
         ),
       ),
       child: Icon(Icons.delete, color: theme.colorScheme.onPrimary),
-    );
-  }
-}
-
-class DialogExample extends StatelessWidget {
-  const DialogExample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () => showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: const Text('Upozornění'),
-          content: const Text('Toto je nevratná operace, určitě chcete záznam smazat?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'Cancel'),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      ),
-      child: const Text('Show Dialog'),
     );
   }
 }

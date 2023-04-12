@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../main.dart';
 
-class AddRecord extends StatelessWidget{
+class EditPage extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     var appState = context.watch<MyAppState>();
@@ -17,18 +17,19 @@ class AddRecord extends StatelessWidget{
         child: Center(
           child: Column(
             children: [
-              SizedBox(height: 24),
-              const Text("Přidání záznamu"),
+              SizedBox(height: 48),
+              const Text("Upravit záznam", style: TextStyle(fontSize: 24)),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Form(
                   key: _formKey0,
                   child: TextFormField(
+                    initialValue: appState.detailName,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Název služby',
                     ),
-                    validator: (value){
+                    validator: (String? value) {
                       value ??= "";
                       return value.isEmpty ? 'Vyplňte prosím toto pole' : null;
                     },
@@ -43,6 +44,7 @@ class AddRecord extends StatelessWidget{
                 child: Form(
                   key: _formKey1,
                   child: TextFormField(
+                    initialValue: appState.detailUsername,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Uživatelské jméno',
@@ -62,6 +64,7 @@ class AddRecord extends StatelessWidget{
                 child: Form(
                   key: _formKey2,
                   child: TextFormField(
+                    initialValue: appState.detailPassword,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Heslo',
@@ -76,64 +79,48 @@ class AddRecord extends StatelessWidget{
                   )
                 ),
               ),
-              Buttons(appState: appState, formKey0: _formKey0, formKey1: _formKey1, formKey2: _formKey2)
-            ]
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.grey,
+                      onPrimary: Colors.white // Background color
+                    ),
+                    onPressed: (){
+                      appState.changePage(2);
+                    }, 
+                    child: const Text("Zrušit")
+                  ),
+                  SizedBox(width: 32),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.green,
+                      onPrimary: Colors.white // Background color
+                    ),
+                    onPressed: (){
+                      if (_formKey0.currentState!.validate() && 
+                          _formKey1.currentState!.validate() && 
+                          _formKey2.currentState!.validate()) {
+                        editRecord(
+                          appState.detailName, 
+                          appState.detailUsername, 
+                          appState.detailPassword, 
+                          appState.name, 
+                          appState.username, 
+                          appState.password
+                        );
+                        appState.changePage(0);
+                      }
+                    }, 
+                    child: const Text("Potvrdit")
+                  ),
+                ],
+              )
+            ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class Buttons extends StatelessWidget {
-  const Buttons({
-    super.key,
-    required this.appState,
-    required this.formKey0,
-    required this.formKey1,
-    required this.formKey2
-  });
-
-  final MyAppState appState;
-  final formKey0;
-  final formKey1;
-  final formKey2;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.grey,
-            onPrimary: Colors.white // Background color
-          ),
-          onPressed: (){
-            appState.changePage(0);
-          }, 
-          child: const Text("Zrušit")
-        ),
-        SizedBox(width: 16),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.green,
-            onPrimary: Colors.white // Background color
-          ),
-          onPressed: (){
-            if (formKey0.currentState!.validate() && 
-                formKey1.currentState!.validate() && 
-                formKey2.currentState!.validate()) {
-              addRecord(appState.name, appState.username, appState.password);
-              appState.changePage(0);
-              appState.name = "";
-              appState.username = "";
-              appState.password = "";
-            }
-          }, 
-          child: const Text("Potvrdit")
-        ),
-      ],
+      )
     );
   }
 }
