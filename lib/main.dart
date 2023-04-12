@@ -83,19 +83,18 @@ class MyAppState extends ChangeNotifier {
   }
 
   var onPage = 0;
-  void changePage(){
-    if (onPage == 0){
-      onPage = 1;
-    }
-    else{
-      onPage = 0;
-    }
+  void changePage(page){
+    onPage = page;
     notifyListeners();
   }
 
   var name;
   var username;
   var password;
+  
+  var detailName;
+  var detailUsername;
+  var detailPassword;
 }
 
 class MainPage extends StatefulWidget {

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:passwords/pages/detail.dart';
 import '../main.dart';
 import 'package:passwords/database.dart';
 import 'package:passwords/pages/addrecord.dart';
@@ -10,9 +11,11 @@ class HomePage extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     var appState = context.watch<MyAppState>();
-    if (appState.onPage == 0)
-      return HomeWidget();
-    return AddRecord();
+    if (appState.onPage == 1)
+      return AddRecord();
+    else if (appState.onPage == 2)
+      return DetailPage();
+    return HomeWidget();
   }
 }
 
@@ -40,7 +43,10 @@ class HomeWidget extends StatelessWidget {
               for (var record in appState.records)
                 InkWell(
                   onTap: (){
-                    print("Pressed");
+                    appState.detailName = record["name"];
+                    appState.detailUsername = record["username"];
+                    appState.detailPassword = record["password"];
+                    appState.changePage(2);
                   }, 
                   child: MyCard(text: record)
                 )
@@ -68,7 +74,7 @@ class PlusButton extends StatelessWidget {
           )
         ),
         onPressed: (){
-          appState.changePage();
+          appState.changePage(1);
         },
         child: Icon(
           Icons.add,
@@ -106,9 +112,17 @@ class MyCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  text["name"],
-                  style: style
+                Row(
+                  children: [
+                    Text(
+                      text["name"],
+                      style: style
+                    ),
+                    Text(
+                      " (${text["username"]})",
+                      style: style,
+                    )
+                  ],
                 ),
                 Row(
                   children: [

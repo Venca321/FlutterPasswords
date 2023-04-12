@@ -98,7 +98,7 @@ class Buttons extends StatelessWidget {
             onPrimary: Colors.white // Background color
           ),
           onPressed: (){
-            appState.changePage();
+            appState.changePage(0);
           }, 
           child: const Text("Zrušit")
         ),
@@ -110,7 +110,7 @@ class Buttons extends StatelessWidget {
           ),
           onPressed: (){
             addRecord(appState.name, appState.username, appState.password);
-            appState.changePage();
+            appState.changePage(0);
             appState.name = "";
             appState.username = "";
             appState.password = "";
