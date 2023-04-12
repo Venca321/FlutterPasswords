@@ -19,6 +19,7 @@ String decrypt(text) {
 }
 
 Future<Database> getDatabase() async {
+  //await deleteDatabase("database.db");
   Database database = await openDatabase("database.db", version: 1,
       onCreate: (Database db, int version) async {
       await db.execute('CREATE TABLE User (pin INTEGER, biometrics TEXT)');
@@ -29,9 +30,11 @@ Future<Database> getDatabase() async {
 
 Future<void> userRegister(pin, biometrics) async {
   var db = await getDatabase();
+  print(pin);
+  print(biometrics);
   await db.transaction((txn) async {
     await txn.rawInsert(
-      'INSERT INTO User(pin, biometrics) VALUES($pin, $biometrics)'
+      'INSERT INTO User(pin, biometrics) VALUES("$pin", "$biometrics")'
     );
   });
   await db.close();

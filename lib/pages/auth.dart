@@ -86,24 +86,88 @@ class PinInput extends StatelessWidget{
 class RegisterPage extends StatelessWidget{
   @override
   Widget build(BuildContext context){
+    var appState = context.watch<MyAppState>();
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: Column(
             children: [
-              const Text("Registrace"),
-              PinInput(),
-              PinInput(),
+              SizedBox(height: 60),
+              const Text("Registrace", style: TextStyle(fontSize: 28)),
+              SizedBox(height: 20),
+              RegisterPin(),
               ElevatedButton(
                 onPressed: (){
-                  print("Press");
+                  if (appState.registerBiometrics == 1){
+                    appState.registerBiometrics = 0;
+                  }
+                  else{
+                    appState.registerBiometrics = 1;
+                  }
                 }, 
                 child: const Text("Použít biometriku")
+              ),
+              ElevatedButton(
+                onPressed: (){
+                  if (appState.registerPin1 == appState.registerPin2){
+                    userRegister(appState.registerPin1, appState.registerBiometrics);
+                  }
+                }, 
+                child: const Text("Registrovat")
               ),
             ],
           ),
         )
       ),
+    );
+  }
+}
+
+class RegisterPin extends StatelessWidget{
+  @override
+  Widget build(BuildContext context){
+    var appState = context.watch<MyAppState>();
+    return Column(
+      children: [
+        Form(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+            child: PinCodeTextField(
+              appContext: context, 
+              length: 6, 
+              onChanged: (value) {}, //Tohle nepotřebuju, ale musí to být definované
+              keyboardType: TextInputType.number,
+              pinTheme: PinTheme(
+                shape: PinCodeFieldShape.box,
+                borderRadius: BorderRadius.circular(8),
+                inactiveColor: Colors.grey
+              ),
+              onCompleted: (value){
+                appState.registerPin1 = value;
+              },
+            )
+          ),
+        ),
+        Form(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+            child: PinCodeTextField(
+              appContext: context, 
+              length: 6, 
+              onChanged: (value) {}, //Tohle nepotřebuju, ale musí to být definované
+              keyboardType: TextInputType.number,
+              pinTheme: PinTheme(
+                shape: PinCodeFieldShape.box,
+                borderRadius: BorderRadius.circular(8),
+                inactiveColor: Colors.grey
+              ),
+              onCompleted: (value){
+                appState.registerPin2 = value;
+              },
+            )
+          ),
+        ),
+      ],
     );
   }
 }

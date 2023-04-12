@@ -91,10 +91,14 @@ class MyAppState extends ChangeNotifier {
   var name;
   var username;
   var password;
-  
+
   var detailName;
   var detailUsername;
   var detailPassword;
+
+  var registerPin1;
+  var registerPin2;
+  var registerBiometrics;
 }
 
 class MainPage extends StatefulWidget {

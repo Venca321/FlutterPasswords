@@ -70,12 +70,6 @@ class NavButtons extends StatelessWidget {
             },
             child: Icon(Icons.edit, color: Colors.black),
           ),
-          InkWell(
-            onTap: () async {
-              await Clipboard.setData(ClipboardData(text: "${appState.detailUsername}\n${appState.password}"));
-            },
-            child: Icon(Icons.copy, color: Colors.black),
-          ),
           TrashButton(appState: appState),
         ],
       ),
