@@ -49,7 +49,6 @@ class MyAppState extends ChangeNotifier {
       
       authed = authenticated;
       if (authenticated){
-        print(authenticated);
         notifyListeners();
       }
     }on PlatformException catch(e){
@@ -70,7 +69,7 @@ class MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  var biometrics = null;
+  var biometrics = false;
   void setBiometrics(newBiometrics){
     biometrics = newBiometrics;
     notifyListeners();
@@ -98,7 +97,6 @@ class MyAppState extends ChangeNotifier {
 
   var registerPin1;
   var registerPin2;
-  var registerBiometrics;
 }
 
 class MainPage extends StatefulWidget {

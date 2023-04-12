@@ -13,8 +13,13 @@ class AuthPage extends StatelessWidget{
   Widget build(BuildContext context){
     var appState = context.watch<MyAppState>();
     getUser().then((value) => {
-      appState.setPin(value?["pin"]),
-      appState.setBiometrics(value?["biometrics"])
+      if (value != null){
+        appState.setPin("${value['pin']}"),
+        appState.setBiometrics(value["biometrics"])
+      }
+      else{
+        appState.setPin(null)
+      }
     });
 
     if(appState.pin == null){
@@ -83,10 +88,24 @@ class PinInput extends StatelessWidget{
   }
 }
 
-class RegisterPage extends StatelessWidget{
+class RegisterPage extends StatefulWidget{
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context){
     var appState = context.watch<MyAppState>();
+
+    var icon;
+    if (appState.biometrics){
+      icon = Icons.check_box;
+    }
+    else{
+      icon = Icons.check_box_outline_blank;
+    }
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -96,21 +115,24 @@ class RegisterPage extends StatelessWidget{
               const Text("Registrace", style: TextStyle(fontSize: 28)),
               SizedBox(height: 20),
               RegisterPin(),
-              ElevatedButton(
+              ElevatedButton.icon(
                 onPressed: (){
-                  if (appState.registerBiometrics == 1){
-                    appState.registerBiometrics = 0;
+                  if (appState.biometrics){
+                    appState.biometrics = false;
                   }
                   else{
-                    appState.registerBiometrics = 1;
+                    appState.biometrics = true;
                   }
+                  setState(() {});
                 }, 
-                child: const Text("Použít biometriku")
+                icon: Icon(icon), 
+                label: const Text("Povolit biometrické ověřování")
               ),
+              SizedBox(height: 22),
               ElevatedButton(
                 onPressed: (){
                   if (appState.registerPin1 == appState.registerPin2){
-                    userRegister(appState.registerPin1, appState.registerBiometrics);
+                    userRegister(appState.registerPin1, appState.biometrics);
                   }
                 }, 
                 child: const Text("Registrovat")
