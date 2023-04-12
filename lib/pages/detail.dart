@@ -31,6 +31,8 @@ class DetailPage extends StatelessWidget{
                 ),
                 SizedBox(height: 8),
                 PasswordRow(appState: appState),
+                SizedBox(height: 350),
+                const Text("Kliknutím na informaci ji kopírujete do schránky")
               ],
             )
           ]
