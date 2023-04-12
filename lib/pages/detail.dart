@@ -14,15 +14,21 @@ class DetailPage extends StatelessWidget{
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(height: 16),
+            SizedBox(height: 22),
             NavButtons(appState: appState),
+            SizedBox(height: 50),
             Column(
               children: [
                 const Text("Podrobné informace", style: TextStyle(fontSize: 28)),
                 SizedBox(height: 16),
                 Text("Název služby: ${appState.detailName}", style: TextStyle(fontSize: 18)),
                 SizedBox(height: 8),
-                Text("Uživatelské jméno: ${appState.detailUsername}", style: TextStyle(fontSize: 18)),
+                InkWell(
+                  onTap: () async {
+                    await Clipboard.setData(ClipboardData(text: "${appState.detailUsername}"));
+                  },
+                  child: Text("Uživatelské jméno: ${appState.detailUsername}", style: TextStyle(fontSize: 18)),
+                ),
                 SizedBox(height: 8),
                 PasswordRow(appState: appState),
               ],
@@ -114,7 +120,7 @@ class TrashButton extends StatelessWidget {
   }
 }
 
-class PasswordRow extends StatelessWidget {
+class PasswordRow extends StatefulWidget {
   PasswordRow({
     super.key,
     required this.appState
@@ -123,16 +129,36 @@ class PasswordRow extends StatelessWidget {
   final appState;
 
   @override
+  State<PasswordRow> createState() => _PasswordRowState();
+}
+
+class _PasswordRowState extends State<PasswordRow> {
+  var password = "------------";
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text("Heslo: ", style: TextStyle(fontSize: 18)),
-        Text("${appState.detailPassword}", style: TextStyle(fontSize: 18)),
+        InkWell(
+          onTap: () async {
+            if (password != "------------"){
+              await Clipboard.setData(ClipboardData(text: "${widget.appState.detailPassword}"));
+            }
+          },
+          child: Text("Heslo: $password", style: TextStyle(fontSize: 18)),
+        ),
         SizedBox(width: 8),
         InkWell(
           onTap: (){
-            
+            if (password == "------------"){
+              password = widget.appState.detailPassword;
+              setState(() {});
+            }
+            else{
+              password = "------------";
+              setState(() {});
+            }
           }, 
           child: Icon(Icons.remove_red_eye)
         )

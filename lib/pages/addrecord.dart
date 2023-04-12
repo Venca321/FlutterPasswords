@@ -17,7 +17,7 @@ class AddRecord extends StatelessWidget{
         child: Center(
           child: Column(
             children: [
-              SizedBox(height: 24),
+              SizedBox(height: 72),
               const Text("Přidání záznamu"),
               Padding(
                 padding: const EdgeInsets.all(16.0),
