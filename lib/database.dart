@@ -62,6 +62,7 @@ Future<List> getRecords() async {
 
 Future<void> addRecord(name, username, password) async {
   var db = await getDatabase();
+  if (name.length < 1 && username.length < 1 && password.length < 1){return;}
   var encryptedName = encrypt(name);
   var encryptedUsername = encrypt(username);
   var encryptedPassword = encrypt(password);

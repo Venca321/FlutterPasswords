@@ -57,6 +57,7 @@ class MyAppState extends ChangeNotifier {
     }
   }
 
+  var pin = null;
   void checkPin(pin, enteredPin){
     if (pin == enteredPin){
       authed = true;
@@ -64,7 +65,6 @@ class MyAppState extends ChangeNotifier {
     }
   }
 
-  var pin = null;
   void setPin(newPin){
     pin = newPin;
     notifyListeners();
@@ -81,6 +81,21 @@ class MyAppState extends ChangeNotifier {
     records = newRecords;
     notifyListeners();
   }
+
+  var onPage = 0;
+  void changePage(){
+    if (onPage == 0){
+      onPage = 1;
+    }
+    else{
+      onPage = 0;
+    }
+    notifyListeners();
+  }
+
+  var name;
+  var username;
+  var password;
 }
 
 class MainPage extends StatefulWidget {

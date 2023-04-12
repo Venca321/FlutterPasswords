@@ -1,13 +1,24 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
-import 'package:passwords/database.dart';
 import 'package:provider/provider.dart';
 
 import '../main.dart';
+import 'package:passwords/database.dart';
+import 'package:passwords/pages/addrecord.dart';
 
 class HomePage extends StatelessWidget{
   @override
   Widget build(BuildContext context){
+    var appState = context.watch<MyAppState>();
+    if (appState.onPage == 0)
+      return HomeWidget();
+    return AddRecord();
+  }
+}
+
+class HomeWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     getRecords().then((value) => {
       appState.loadRecords(value)
@@ -21,26 +32,7 @@ class HomePage extends StatelessWidget{
               SizedBox(height: 30),
               Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: Colors.green),
-                          )
-                        )
-                      ),
-                      onPressed: (){
-                        print("Press");
-                      },
-                      child: Icon(
-                        Icons.add,
-                        size: 32,
-                      )
-                    ),
-                  ),
+                  PlusButton(),
                   Text("Vaše záznamy:", style: Theme.of(context).textTheme.titleLarge),
                 ],
               ),
@@ -56,6 +48,33 @@ class HomePage extends StatelessWidget{
           ),
         )
       )
+    );
+  }
+}
+
+class PlusButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(40, 10, 30, 10),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+              side: BorderSide(color: Colors.green),
+            )
+          )
+        ),
+        onPressed: (){
+          appState.changePage();
+        },
+        child: Icon(
+          Icons.add,
+          size: 32,
+        )
+      ),
     );
   }
 }
@@ -99,29 +118,7 @@ class MyCard extends StatelessWidget {
                       },
                       child: Icon(Icons.copy, color: theme.colorScheme.onPrimary),
                     ),
-                    InkWell(
-                      onTap: () => showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Upozornění'),
-                          content: const Text('Toto je nevratná operace, určitě chcete záznam smazat?'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'Cancel'),
-                              child: const Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: (){
-                                removeRecord(text["name"], text["username"], text["password"]);
-                                Navigator.pop(context, 'Ok');
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ),
-                      ),
-                      child: Icon(Icons.delete, color: theme.colorScheme.onPrimary),
-                    )
+                    TrashButton(text: text, theme: theme)
                   ],
                 )
               ],
@@ -129,6 +126,44 @@ class MyCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class TrashButton extends StatelessWidget {
+  const TrashButton({
+    super.key,
+    required this.text,
+    required this.theme,
+  });
+
+  final text;
+  final ThemeData theme;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Upozornění'),
+          content: const Text('Toto je nevratná operace, určitě chcete záznam smazat?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: (){
+                removeRecord(text["name"], text["username"], text["password"]);
+                Navigator.pop(context, 'Ok');
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      ),
+      child: Icon(Icons.delete, color: theme.colorScheme.onPrimary),
     );
   }
 }
