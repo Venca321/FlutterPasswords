@@ -69,7 +69,8 @@ class MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  var biometrics = false;
+  var askBiometrics = true;
+  var biometrics = true;
   void setBiometrics(newBiometrics){
     if (newBiometrics.toString() == "true"){biometrics == true;}
     if (newBiometrics.toString() == "false"){biometrics == false;}

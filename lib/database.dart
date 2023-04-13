@@ -22,7 +22,7 @@ Future<Database> getDatabase() async {
   //await deleteDatabase("database.db");
   Database database = await openDatabase("database.db", version: 1,
       onCreate: (Database db, int version) async {
-      await db.execute('CREATE TABLE User (pin INTEGER, biometrics TEXT)');
+      await db.execute('CREATE TABLE User (pin TEXT, biometrics TEXT)');
       await db.execute('CREATE TABLE Records (name TEXT, username TEXT, password TEXT)');
   });
   return database;

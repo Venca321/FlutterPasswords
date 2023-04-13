@@ -34,28 +34,30 @@ class HomeWidget extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Column(
-            children: [
-              SizedBox(height: 30),
-              Row(
-                children: [
-                  PlusButton(),
-                  Text("Vaše záznamy:", style: Theme.of(context).textTheme.titleLarge),
-                ],
-              ),
-              SizedBox(height: 20),
-              for (var record in appState.records)
-                InkWell(
-                  onTap: (){
-                    appState.detailName = record["name"];
-                    appState.detailUsername = record["username"];
-                    appState.detailPassword = record["password"];
-                    appState.changePage(2);
-                  }, 
-                  child: MyCard(text: record)
-                )
-            ],
-          ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 30),
+                Row(
+                  children: [
+                    PlusButton(),
+                    Text("Vaše záznamy:", style: Theme.of(context).textTheme.titleLarge),
+                  ],
+                ),
+                SizedBox(height: 20),
+                for (var record in appState.records)
+                  InkWell(
+                    onTap: (){
+                      appState.detailName = record["name"];
+                      appState.detailUsername = record["username"];
+                      appState.detailPassword = record["password"];
+                      appState.changePage(2);
+                    }, 
+                    child: MyCard(text: record)
+                  )
+              ],
+            ),
+          )
         )
       )
     );

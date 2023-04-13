@@ -1,6 +1,4 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +33,10 @@ class LoginPage extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     var appState = context.watch<MyAppState>();
-    //appState.authenticate();
+    if (appState.biometrics && appState.askBiometrics){
+      appState.askBiometrics = false;
+      appState.authenticate();
+    }
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -46,12 +47,13 @@ class LoginPage extends StatelessWidget{
               children: [
                 const Text("Přihlášení", style: TextStyle(fontSize: 30)),
                 PinInput(),
-                ElevatedButton(
-                  onPressed: (){
-                    appState.authenticate();
-                  }, 
-                  child: const Text("Použít biometriku", style: TextStyle(fontSize: 20))
-                ),
+                if (appState.biometrics)
+                  ElevatedButton(
+                    onPressed: (){
+                      appState.authenticate();
+                    }, 
+                    child: const Text("Použít biometrické ověření", style: TextStyle(fontSize: 20))
+                  ),
                 SizedBox(height: 150)
               ],
             ),
