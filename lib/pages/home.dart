@@ -1,11 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../main.dart';
 import 'package:passwords/pages/edit.dart';
 import 'package:passwords/pages/detail.dart';
-import '../main.dart';
 import 'package:passwords/database.dart';
 import 'package:passwords/pages/addrecord.dart';
 
@@ -34,30 +33,36 @@ class HomeWidget extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: 30),
-                Row(
-                  children: [
-                    PlusButton(),
-                    Text("Vaše záznamy:", style: Theme.of(context).textTheme.titleLarge),
-                  ],
-                ),
-                SizedBox(height: 20),
-                for (var record in appState.records)
-                  InkWell(
-                    onTap: (){
-                      appState.detailName = record["name"];
-                      appState.detailUsername = record["username"];
-                      appState.detailPassword = record["password"];
-                      appState.changePage(2);
-                    }, 
-                    child: MyCard(text: record)
+          child: Column(
+            children: [
+              SizedBox(height: 30),
+              Row(
+                children: [
+                  PlusButton(),
+                  Text("Vaše záznamy:", style: Theme.of(context).textTheme.titleLarge),
+                ],
+              ),
+              SizedBox(height: 20),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      for (var record in appState.records)
+                        InkWell(
+                          onTap: (){
+                            appState.detailName = record["name"];
+                            appState.detailUsername = record["username"];
+                            appState.detailPassword = record["password"];
+                            appState.changePage(2);
+                          }, 
+                          child: MyCard(text: record)
+                        )
+                    ],
                   )
-              ],
-            ),
-          )
+                )
+              )
+            ],
+          ),
         )
       )
     );

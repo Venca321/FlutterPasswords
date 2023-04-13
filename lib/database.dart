@@ -5,14 +5,14 @@ import 'package:sqflite/sqflite.dart';
 final iv = IV.fromLength(16);
 
 String encrypt(text) {
-  final key = Key.fromUtf8('my 32 length key................');
+  final key = Key.fromUtf8('X3EhZ7eprfPZblJFChLHUWNVSJtpzEAa');
   final encrypter = Encrypter(AES(key));
   final encrypted = encrypter.encrypt(text, iv: iv);
   return encrypted.base64;
 }
 
 String decrypt(text) {
-  final key = Key.fromUtf8('my 32 length key................');
+  final key = Key.fromUtf8('X3EhZ7eprfPZblJFChLHUWNVSJtpzEAa');
   final encrypter = Encrypter(AES(key));
   final decrypted = encrypter.decrypt64(text, iv: iv);
   return decrypted;
