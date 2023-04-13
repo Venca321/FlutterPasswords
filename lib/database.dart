@@ -30,12 +30,17 @@ Future<Database> getDatabase() async {
 
 Future<void> userRegister(pin, biometrics) async {
   var db = await getDatabase();
-  await db.transaction((txn) async {
-    await txn.rawInsert(
-      'INSERT INTO User(pin, biometrics) VALUES("$pin", "$biometrics")'
-    );
-  });
-  await db.close();
+  try{
+    await db.transaction((txn) async {
+      await txn.rawInsert(
+        'INSERT INTO User(pin, biometrics) VALUES("$pin", "$biometrics")'
+      );
+    });
+    await db.close();
+  }
+  catch(e){
+    userRegister(pin, biometrics);
+  }
 }
 
 Future<Map?> getUser() async {

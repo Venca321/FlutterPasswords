@@ -113,7 +113,7 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Center(
           child: Column(
             children: [
-              SizedBox(height: 60),
+              SizedBox(height: 150),
               const Text("Registrace", style: TextStyle(fontSize: 28)),
               SizedBox(height: 20),
               RegisterPin(),

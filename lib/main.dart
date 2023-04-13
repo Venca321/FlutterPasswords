@@ -70,10 +70,10 @@ class MyAppState extends ChangeNotifier {
   }
 
   var askBiometrics = true;
-  var biometrics = true;
+  var biometrics = false;
   void setBiometrics(newBiometrics){
-    if (newBiometrics.toString() == "true"){biometrics == true;}
-    if (newBiometrics.toString() == "false"){biometrics == false;}
+    if (newBiometrics.toString() == "true"){biometrics = true;}
+    else if (newBiometrics.toString() == "false"){biometrics = false;}
   }
 
   var records = [];
