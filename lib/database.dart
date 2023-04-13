@@ -33,7 +33,7 @@ Future<void> userRegister(pin, biometrics) async {
   try{
     await db.transaction((txn) async {
       await txn.rawInsert(
-        'INSERT INTO User(pin, biometrics) VALUES("$pin", "$biometrics")'
+        'INSERT INTO User(pin, biometrics) VALUES("${encrypt(pin)}", "$biometrics")'
       );
     });
     await db.close();
@@ -48,7 +48,7 @@ Future<Map?> getUser() async {
   List<Map> list = await db.rawQuery('SELECT * FROM User');
   await db.close();
   try{
-    return list[0];
+    return {"pin": decrypt(list[0]["pin"]), "biometrics": list[0]["biometrics"]};
   }
   catch(e){print(list);}
 }
